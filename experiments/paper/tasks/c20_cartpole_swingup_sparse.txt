@@ -1,0 +1,11 @@
+# c20_cartpole_swingup_sparse: arm ct_sac_released_features, config m19_cartpole_swingup_sparse.json, seeds 0-9. One run per line: name|threads|arguments of benchmarks/run_ph_sac.py
+ct_sac_released_features_s0|1|--config <RUN_ROOT>/final/2026-11-23_r20/configs/m19_cartpole_swingup_sparse.json --arms ct_sac_released_features --seeds 0
+ct_sac_released_features_s1|1|--config <RUN_ROOT>/final/2026-11-23_r20/configs/m19_cartpole_swingup_sparse.json --arms ct_sac_released_features --seeds 1
+ct_sac_released_features_s2|1|--config <RUN_ROOT>/final/2026-11-23_r20/configs/m19_cartpole_swingup_sparse.json --arms ct_sac_released_features --seeds 2
+ct_sac_released_features_s3|1|--config <RUN_ROOT>/final/2026-11-23_r20/configs/m19_cartpole_swingup_sparse.json --arms ct_sac_released_features --seeds 3
+ct_sac_released_features_s4|1|--config <RUN_ROOT>/final/2026-11-23_r20/configs/m19_cartpole_swingup_sparse.json --arms ct_sac_released_features --seeds 4
+ct_sac_released_features_s5|1|--config <RUN_ROOT>/final/2026-11-23_r20/configs/m19_cartpole_swingup_sparse.json --arms ct_sac_released_features --seeds 5
+ct_sac_released_features_s6|1|--config <RUN_ROOT>/final/2026-11-23_r20/configs/m19_cartpole_swingup_sparse.json --arms ct_sac_released_features --seeds 6
+ct_sac_released_features_s7|1|--config <RUN_ROOT>/final/2026-11-23_r20/configs/m19_cartpole_swingup_sparse.json --arms ct_sac_released_features --seeds 7
+ct_sac_released_features_s8|1|--config <RUN_ROOT>/final/2026-11-23_r20/configs/m19_cartpole_swingup_sparse.json --arms ct_sac_released_features --seeds 8
+ct_sac_released_features_s9|1|--config <RUN_ROOT>/final/2026-11-23_r20/configs/m19_cartpole_swingup_sparse.json --arms ct_sac_released_features --seeds 9

@@ -7,6 +7,7 @@ tensorboard
 imageio
 opencv-python
 torch
+scipy
 
 # RL-related
 gymnasium
@@ -16,3 +17,4 @@ sb3-contrib
 # DMC
 dm_env
 dm_control
+mujoco

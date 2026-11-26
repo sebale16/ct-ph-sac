@@ -1,0 +1,10 @@
+c20_acrobot_swingup
+c20_cartpole_balance
+c20_cartpole_balance_sparse
+c20_cartpole_swingup
+c20_cartpole_swingup_sparse
+c20_cartpole_two_poles
+c20_cartpole_three_poles
+c20_point_mass_easy
+c20_lqr_lqr_2_1
+c20_lqr_lqr_6_2

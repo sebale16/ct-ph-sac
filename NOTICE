@@ -1,0 +1,8 @@
+This repository is a fork of the CT-SAC code base https://github.com/mpnguyen2/ct-rl.
+
+The MuJoCo model descriptions in environment/ph_sac/dmc/ (acrobot.py, cartpole.py, pendulum.py,
+point_mass.py, reacher.py, swimmer.py) are adapted from the task models of the DeepMind Control
+Suite (dm_control, https://github.com/google-deepmind/dm_control), Copyright The dm_control
+Authors, licensed under the Apache License, Version 2.0
+(http://www.apache.org/licenses/LICENSE-2.0). They have been modified; the comments in each
+file say how.

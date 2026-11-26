@@ -1,0 +1,11 @@
+# a20h_lqr_lqr_6_2: arm implicit_critic_head, config r20abl_lqr_lqr_6_2.json, seeds 0-9. One run per line: name|threads|arguments of benchmarks/run_ph_sac.py
+critic_head_s0|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_critic_head --seeds 0
+critic_head_s1|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_critic_head --seeds 1
+critic_head_s2|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_critic_head --seeds 2
+critic_head_s3|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_critic_head --seeds 3
+critic_head_s4|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_critic_head --seeds 4
+critic_head_s5|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_critic_head --seeds 5
+critic_head_s6|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_critic_head --seeds 6
+critic_head_s7|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_critic_head --seeds 7
+critic_head_s8|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_critic_head --seeds 8
+critic_head_s9|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_critic_head --seeds 9

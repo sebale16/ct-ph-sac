@@ -1,0 +1,11 @@
+# a20i_lqr_lqr_6_2: arm implicit_explicit_step_interval, config r20abl_lqr_lqr_6_2.json, seeds 0-9. One run per line: name|threads|arguments of benchmarks/run_ph_sac.py
+explicit_interval_s0|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_explicit_step_interval --seeds 0
+explicit_interval_s1|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_explicit_step_interval --seeds 1
+explicit_interval_s2|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_explicit_step_interval --seeds 2
+explicit_interval_s3|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_explicit_step_interval --seeds 3
+explicit_interval_s4|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_explicit_step_interval --seeds 4
+explicit_interval_s5|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_explicit_step_interval --seeds 5
+explicit_interval_s6|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_explicit_step_interval --seeds 6
+explicit_interval_s7|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_explicit_step_interval --seeds 7
+explicit_interval_s8|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_explicit_step_interval --seeds 8
+explicit_interval_s9|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_6_2.json --arms implicit_explicit_step_interval --seeds 9

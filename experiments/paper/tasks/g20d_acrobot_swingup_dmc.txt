@@ -1,0 +1,11 @@
+# g20d_acrobot_swingup_dmc: arm explicit_generator_torque, config r20dmc_acrobot_swingup.json, seeds 0-9. One run per line: name|threads|arguments of benchmarks/run_ph_sac.py
+generator_torque_s0|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20dmc_acrobot_swingup.json --arms explicit_generator_torque --seeds 0
+generator_torque_s1|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20dmc_acrobot_swingup.json --arms explicit_generator_torque --seeds 1
+generator_torque_s2|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20dmc_acrobot_swingup.json --arms explicit_generator_torque --seeds 2
+generator_torque_s3|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20dmc_acrobot_swingup.json --arms explicit_generator_torque --seeds 3
+generator_torque_s4|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20dmc_acrobot_swingup.json --arms explicit_generator_torque --seeds 4
+generator_torque_s5|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20dmc_acrobot_swingup.json --arms explicit_generator_torque --seeds 5
+generator_torque_s6|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20dmc_acrobot_swingup.json --arms explicit_generator_torque --seeds 6
+generator_torque_s7|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20dmc_acrobot_swingup.json --arms explicit_generator_torque --seeds 7
+generator_torque_s8|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20dmc_acrobot_swingup.json --arms explicit_generator_torque --seeds 8
+generator_torque_s9|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20dmc_acrobot_swingup.json --arms explicit_generator_torque --seeds 9

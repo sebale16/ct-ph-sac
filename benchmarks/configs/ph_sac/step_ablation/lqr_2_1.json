@@ -1,0 +1,168 @@
+{
+  "_experiment_choices": {
+    "experiment": "Value-step ablation pilot (docs/ct_ph_sac_layout.md, Value-step ablation; evaluations/ph_sac/protocol.step_ablation_arms): implicit_explicit_step (one explicit Euler step of length tau = resolvent_step 1 s in place of the resolvent step), implicit_explicit_step_interval (the same with each row's Delta) and implicit_critic_head (explicit_generator's twin critic in place of the rate head for its fit and the actor; resolvent step and learned reward unchanged) and implicit_critic (the critic also read by the resolvent step as (Q - V)/Delta_ref, Delta_ref the clock's mean interval 14.736 ms, no learned reward; an explicit step of about 14.5 ms in the generator); every arm takes torque decisions, as the paper arms (the motor box, -1 entropy per torque); run with --arms implicit_explicit_step implicit_explicit_step_interval implicit_critic implicit_critic_head, and add implicit_torque explicit_generator_torque for the two reference arms on the same settings",
+    "testbed_settings.torque_limit": "2 N (common/ph_dmc/lqr.py torque_limit, the optional setting of the lqr_6_2 diagnostic of 2026-11-11; the table row keeps 20 N): stiffness 0-20 N/m and damping 0-4 N s/m by the box rule (the feedback box the config holds; the arms' torque box is the +-2 N motor box). The final runs' lqr settings are not in this tree (Vista); check this against them",
+    "testbed_settings.clock": "the irregular rows' clock (benchmarks/make_ct_ph_sac_table.IRREGULAR_CLOCK: two_tail_uniform, tail_probability 0.99, tail_split 0.9) on [T/5, 3T] = [6, 90] ms, mean 14.736 ms = 0.4912 T; the table has no lqr row of mode irregular",
+    "protocol.interaction_budget": "300000 decisions (pilot)",
+    "protocol.output_directory": "out/ph_sac/step_ablation/lqr_lqr_2_1",
+    "everything else": "the lqr-lqr_2_1 row of mode top (benchmarks/hyperparams/ct_ph_sac.csv): K 400, tau 1 s, N 4, rate/actor steps 200/40, drift-only plant, rk4 at 10 ms, learned reward, always-admit, plant step dense to 100k then every 4th row, evaluation every 20000 decisions on reset seeds 20000-20031, seeds 0-9"
+  },
+  "testbed": "lqr_2_1",
+  "testbed_settings": {
+    "failure_limits": {},
+    "reward_parameters": {
+      "control_cost": 0.1
+    },
+    "reset_parameters": {
+      "position_radius": 1.4142135623730951,
+      "velocity_noise": 0.0
+    },
+    "plant_parameters": {
+      "n_bodies": 2,
+      "n_actuated": 1,
+      "body_mass": 4.188790204786391,
+      "stiffness_low": 15.0,
+      "stiffness_high": 25.0,
+      "damping": 0.0,
+      "stiffness": "20.488135039273246,21.02763376071644"
+    },
+    "torque_limit": 2.0,
+    "clock_kind": "two_tail_uniform",
+    "tail_probability": 0.99,
+    "tail_split": 0.9
+  },
+  "model_step": 0.01,
+  "model_integrator": "rk4",
+  "network": {
+    "hidden_sizes": [
+      256,
+      256
+    ],
+    "plant_hidden_sizes": [
+      64,
+      64
+    ],
+    "activation": "tanh",
+    "mass_floor": 0.01,
+    "diffusion_floor": 0.001,
+    "damping_rank": 2,
+    "velocity_feature_scale": 6.283185307179586,
+    "diffusion": "none"
+  },
+  "training": {
+    "seed": 0,
+    "device": "cpu",
+    "replay_capacity": 1000000,
+    "batch_size": 256,
+    "learning_rate": 0.0003,
+    "gradient_clip": 10.0,
+    "warmup_episodes": 5,
+    "validation_fraction": 0.05,
+    "plant_step_dense_until": 100000,
+    "plant_step_every": 4
+  },
+  "temperature": {
+    "initial_alpha_c": 0.1,
+    "learn_temperature": true,
+    "target_entropy": -3.0
+  },
+  "explicit": {
+    "plant_source": "learned",
+    "continuation": "generator",
+    "polyak_rate": 0.0125,
+    "rollout_paths": 4
+  },
+  "implicit": {
+    "plant_source": "learned",
+    "reward_source": "learned",
+    "reward_warm_steps": 2000,
+    "plant_warm_steps": 2000,
+    "plant_fit_covariance": "leading_order",
+    "temperature_every_rows": 40,
+    "solver": {
+      "resolvent_step": 1.0,
+      "policy_draws": 4,
+      "inner_steps": 400,
+      "residual_estimator": "all_pairs"
+    },
+    "rate": {
+      "replay_weight_max": 1.0,
+      "noise_variance_floor": 1.0,
+      "rollout_weight": 1.0,
+      "model_weight": 1.0,
+      "rollout_paths": 4,
+      "model_points": 256,
+      "rate_steps": 200,
+      "actor_steps": 40
+    },
+    "admission": {
+      "efolds": 3.0,
+      "margin_z": 1.645,
+      "initial_rows": 32,
+      "initial_paths": 4,
+      "pilot_batches": 2,
+      "real_row_budget": 512,
+      "simulated_path_budget": 65536,
+      "allocation": "pilot",
+      "inference": "empirical",
+      "plant_update": "always",
+      "polyak_rate": null
+    }
+  },
+  "protocol": {
+    "interaction_budget": 300000,
+    "temperature_per_second": 0.1,
+    "training_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "evaluation_reset_seeds": [
+      20000,
+      20001,
+      20002,
+      20003,
+      20004,
+      20005,
+      20006,
+      20007,
+      20008,
+      20009,
+      20010,
+      20011,
+      20012,
+      20013,
+      20014,
+      20015,
+      20016,
+      20017,
+      20018,
+      20019,
+      20020,
+      20021,
+      20022,
+      20023,
+      20024,
+      20025,
+      20026,
+      20027,
+      20028,
+      20029,
+      20030,
+      20031
+    ],
+    "evaluation_every_interactions": 20000,
+    "deterministic_evaluation": true,
+    "ablation_polyak_rate": 0.0125,
+    "baseline_expectation_samples": 1,
+    "checkpoint_replay": true,
+    "output_directory": "out/ph_sac/step_ablation/lqr_lqr_2_1"
+  }
+}

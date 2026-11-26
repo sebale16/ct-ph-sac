@@ -1,0 +1,11 @@
+# a20t_lqr_lqr_2_1: arm implicit_explicit_step, config r20abl_lqr_lqr_2_1.json, seeds 0-9. One run per line: name|threads|arguments of benchmarks/run_ph_sac.py
+explicit_tau_s0|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_2_1.json --arms implicit_explicit_step --seeds 0
+explicit_tau_s1|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_2_1.json --arms implicit_explicit_step --seeds 1
+explicit_tau_s2|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_2_1.json --arms implicit_explicit_step --seeds 2
+explicit_tau_s3|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_2_1.json --arms implicit_explicit_step --seeds 3
+explicit_tau_s4|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_2_1.json --arms implicit_explicit_step --seeds 4
+explicit_tau_s5|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_2_1.json --arms implicit_explicit_step --seeds 5
+explicit_tau_s6|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_2_1.json --arms implicit_explicit_step --seeds 6
+explicit_tau_s7|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_2_1.json --arms implicit_explicit_step --seeds 7
+explicit_tau_s8|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_2_1.json --arms implicit_explicit_step --seeds 8
+explicit_tau_s9|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20abl_lqr_lqr_2_1.json --arms implicit_explicit_step --seeds 9

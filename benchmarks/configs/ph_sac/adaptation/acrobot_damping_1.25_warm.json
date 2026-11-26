@@ -1,0 +1,178 @@
+{
+  "_experiment_choices": {
+    "experiment": "Adaptation pilot (docs/ct_ph_sac_layout.md, Adaptation experiment): the runs of the final acrobot-swingup irregular row (2026-11-12_r5), trained to 500k decisions, continue on a robot whose joint damping is 25% higher. This file: arms 1 and 2, the paper arms ct_sac_torque and implicit_torque, each warm-started from its own runs (g_acrobot_swingup, gt_acrobot_swingup), the implicit arm with every part of the plant trainable; run with --arms ct_sac_torque implicit_torque, and add implicit_learned_admissions for the impedance-law arm warm-started the same way from its runs (g_acrobot_swingup)",
+    "testbed_settings.physical_change": "kind damping, scale 1.25: shoulder_damping and elbow_damping 0.05 -> 0.0625 N m s/rad (common.ph_dmc.acrobot.acrobot_physical_change); masses, lengths and inertias unchanged. The reward is unchanged; no learner is told the change",
+    "protocol.warm_start": "checkpoint.pt of each source run, seed for seed (the run's training seed is the source's); require_interactions 500000 refuses an intermediate checkpoint of a run still in progress. Loaded: actor, critics and targets (CT-SAC); actor, rate head, value and target, online and admitted plant, learned reward (implicit); the tuned temperature. Fresh: optimizers, replay (empty), counters, schedules; warm-up and the implicit warm fit skipped",
+    "protocol.interaction_budget": "100000 decisions on the changed robot, counted from 0",
+    "protocol.evaluation_every_interactions": "2500; the evaluation at 0 scores the source policy on the changed robot before any update",
+    "protocol.training_seeds": "0-2 of the source's 0-9, a pilot",
+    "training.plant_step_dense_until": "100000 as the row: the interaction count restarts at 0, so the implicit plant takes a step on every row for the whole pilot, as the from-scratch control does",
+    "everything else": "the acrobot-swingup row of mode irregular (benchmarks/hyperparams/ct_ph_sac.csv), as the source runs"
+  },
+  "testbed": "acrobot_swingup",
+  "testbed_settings": {
+    "failure_limits": {},
+    "reward_parameters": {
+      "energy_scale": 39.24,
+      "upright_energy": 19.62,
+      "lyapunov_k_p": 15.331767469904836,
+      "reward_floor": 1e-06
+    },
+    "reset_parameters": {
+      "angle_range": 3.141592653589793,
+      "velocity_noise": 0.0
+    },
+    "plant_parameters": {
+      "l1": 1.0,
+      "l2": 1.0,
+      "m1": 1.0,
+      "m2": 1.0,
+      "radius1": 0.05,
+      "radius2": 0.049,
+      "shoulder_damping": 0.05,
+      "elbow_damping": 0.05
+    },
+    "clock_kind": "two_tail_uniform",
+    "tail_probability": 0.99,
+    "tail_split": 0.9,
+    "physical_change": {
+      "kind": "damping",
+      "scale": 1.25
+    }
+  },
+  "model_step": 0.002,
+  "model_integrator": "rk4",
+  "network": {
+    "hidden_sizes": [
+      256,
+      256
+    ],
+    "plant_hidden_sizes": [
+      64,
+      64
+    ],
+    "activation": "tanh",
+    "mass_floor": 0.01,
+    "diffusion_floor": 0.001,
+    "damping_rank": 2,
+    "velocity_feature_scale": 6.283185307179586,
+    "diffusion": "none"
+  },
+  "training": {
+    "seed": 0,
+    "device": "cpu",
+    "replay_capacity": 1000000,
+    "batch_size": 256,
+    "learning_rate": 0.0003,
+    "gradient_clip": 10.0,
+    "warmup_episodes": 5,
+    "validation_fraction": 0.05,
+    "plant_step_dense_until": 100000,
+    "plant_step_every": 4
+  },
+  "temperature": {
+    "initial_alpha_c": 0.1,
+    "learn_temperature": true,
+    "target_entropy": -3.0
+  },
+  "explicit": {
+    "plant_source": "learned",
+    "continuation": "generator",
+    "polyak_rate": 0.0125,
+    "rollout_paths": 4
+  },
+  "implicit": {
+    "plant_source": "learned",
+    "reward_source": "learned",
+    "reward_warm_steps": 2000,
+    "plant_warm_steps": 2000,
+    "plant_fit_covariance": "leading_order",
+    "temperature_every_rows": 40,
+    "solver": {
+      "resolvent_step": 1.0,
+      "policy_draws": 4,
+      "inner_steps": 400,
+      "residual_estimator": "all_pairs"
+    },
+    "rate": {
+      "replay_weight_max": 1.0,
+      "noise_variance_floor": 1.0,
+      "rollout_weight": 1.0,
+      "model_weight": 1.0,
+      "rollout_paths": 4,
+      "model_points": 256,
+      "rate_steps": 200,
+      "actor_steps": 40
+    },
+    "admission": {
+      "efolds": 3.0,
+      "margin_z": 1.645,
+      "initial_rows": 32,
+      "initial_paths": 4,
+      "pilot_batches": 2,
+      "real_row_budget": 512,
+      "simulated_path_budget": 65536,
+      "allocation": "pilot",
+      "inference": "empirical",
+      "plant_update": "always",
+      "polyak_rate": null
+    }
+  },
+  "protocol": {
+    "interaction_budget": 100000,
+    "temperature_per_second": 0.1,
+    "training_seeds": [
+      0,
+      1,
+      2
+    ],
+    "evaluation_reset_seeds": [
+      20000,
+      20001,
+      20002,
+      20003,
+      20004,
+      20005,
+      20006,
+      20007,
+      20008,
+      20009,
+      20010,
+      20011,
+      20012,
+      20013,
+      20014,
+      20015,
+      20016,
+      20017,
+      20018,
+      20019,
+      20020,
+      20021,
+      20022,
+      20023,
+      20024,
+      20025,
+      20026,
+      20027,
+      20028,
+      20029,
+      20030,
+      20031
+    ],
+    "evaluation_every_interactions": 2500,
+    "deterministic_evaluation": true,
+    "ablation_polyak_rate": 0.0125,
+    "baseline_expectation_samples": 1,
+    "checkpoint_replay": true,
+    "output_directory": "out/ph_sac/adaptation/acrobot_damping_1.25_warm",
+    "warm_start": {
+      "checkpoints": {
+        "ct_sac_torque": "<RUN_ROOT>/final/2026-11-12_r5/runs/g_acrobot_swingup/ct_sac_s{seed}/acrobot_swingup/ct_sac_torque/seed_{seed}/checkpoint.pt",
+        "implicit_learned_admissions": "<RUN_ROOT>/final/2026-11-12_r5/runs/g_acrobot_swingup/implicit_s{seed}/acrobot_swingup/implicit_learned_admissions/seed_{seed}/checkpoint.pt",
+        "implicit_torque": "<RUN_ROOT>/final/2026-11-12_r5/runs/gt_acrobot_swingup/implicit_torque_s{seed}/acrobot_swingup/implicit_torque/seed_{seed}/checkpoint.pt"
+      },
+      "require_interactions": 500000
+    }
+  }
+}

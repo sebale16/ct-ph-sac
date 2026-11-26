@@ -1,0 +1,8 @@
+i20d_acrobot_swingup_dmc
+g20d_acrobot_swingup_dmc
+r20d_acrobot_swingup_dmc
+c20d_acrobot_swingup_dmc
+i20d_pendulum_swingup_dmc
+g20d_pendulum_swingup_dmc
+r20d_pendulum_swingup_dmc
+c20d_pendulum_swingup_dmc

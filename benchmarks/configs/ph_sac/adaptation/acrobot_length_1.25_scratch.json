@@ -1,0 +1,168 @@
+{
+  "_experiment_choices": {
+    "experiment": "Adaptation pilot (docs/ct_ph_sac_layout.md, Adaptation experiment): controls trained from scratch on the acrobot whose lower link is 25% longer. This file: arms 4 and 5, the paper arms ct_sac_torque and implicit_torque, without a warm start (warm-up, warm fit and every schedule as in any run); run with --arms ct_sac_torque implicit_torque, and add implicit_learned_admissions for the impedance-law arm",
+    "testbed_settings.physical_change": "kind length, scale 1.25: l2 1.0 -> 1.25 m, the capsule's mass m2 (1 kg) and radius kept (common.ph_dmc.acrobot.acrobot_physical_change). The reward stays the nominal robot's function of the state; no learner is told the change (the learned plant starts at its generic initialisation)",
+    "protocol.interaction_budget": "100000 decisions, the warm-started arms' budget",
+    "protocol.evaluation_every_interactions": "2500, as the warm-started arms",
+    "protocol.training_seeds": "0-2, as the warm-started arms",
+    "everything else": "the acrobot-swingup row of mode irregular (benchmarks/hyperparams/ct_ph_sac.csv)"
+  },
+  "testbed": "acrobot_swingup",
+  "testbed_settings": {
+    "failure_limits": {},
+    "reward_parameters": {
+      "energy_scale": 39.24,
+      "upright_energy": 19.62,
+      "lyapunov_k_p": 15.331767469904836,
+      "reward_floor": 1e-06
+    },
+    "reset_parameters": {
+      "angle_range": 3.141592653589793,
+      "velocity_noise": 0.0
+    },
+    "plant_parameters": {
+      "l1": 1.0,
+      "l2": 1.0,
+      "m1": 1.0,
+      "m2": 1.0,
+      "radius1": 0.05,
+      "radius2": 0.049,
+      "shoulder_damping": 0.05,
+      "elbow_damping": 0.05
+    },
+    "clock_kind": "two_tail_uniform",
+    "tail_probability": 0.99,
+    "tail_split": 0.9,
+    "physical_change": {
+      "kind": "length",
+      "scale": 1.25
+    }
+  },
+  "model_step": 0.002,
+  "model_integrator": "rk4",
+  "network": {
+    "hidden_sizes": [
+      256,
+      256
+    ],
+    "plant_hidden_sizes": [
+      64,
+      64
+    ],
+    "activation": "tanh",
+    "mass_floor": 0.01,
+    "diffusion_floor": 0.001,
+    "damping_rank": 2,
+    "velocity_feature_scale": 6.283185307179586,
+    "diffusion": "none"
+  },
+  "training": {
+    "seed": 0,
+    "device": "cpu",
+    "replay_capacity": 1000000,
+    "batch_size": 256,
+    "learning_rate": 0.0003,
+    "gradient_clip": 10.0,
+    "warmup_episodes": 5,
+    "validation_fraction": 0.05,
+    "plant_step_dense_until": 100000,
+    "plant_step_every": 4
+  },
+  "temperature": {
+    "initial_alpha_c": 0.1,
+    "learn_temperature": true,
+    "target_entropy": -3.0
+  },
+  "explicit": {
+    "plant_source": "learned",
+    "continuation": "generator",
+    "polyak_rate": 0.0125,
+    "rollout_paths": 4
+  },
+  "implicit": {
+    "plant_source": "learned",
+    "reward_source": "learned",
+    "reward_warm_steps": 2000,
+    "plant_warm_steps": 2000,
+    "plant_fit_covariance": "leading_order",
+    "temperature_every_rows": 40,
+    "solver": {
+      "resolvent_step": 1.0,
+      "policy_draws": 4,
+      "inner_steps": 400,
+      "residual_estimator": "all_pairs"
+    },
+    "rate": {
+      "replay_weight_max": 1.0,
+      "noise_variance_floor": 1.0,
+      "rollout_weight": 1.0,
+      "model_weight": 1.0,
+      "rollout_paths": 4,
+      "model_points": 256,
+      "rate_steps": 200,
+      "actor_steps": 40
+    },
+    "admission": {
+      "efolds": 3.0,
+      "margin_z": 1.645,
+      "initial_rows": 32,
+      "initial_paths": 4,
+      "pilot_batches": 2,
+      "real_row_budget": 512,
+      "simulated_path_budget": 65536,
+      "allocation": "pilot",
+      "inference": "empirical",
+      "plant_update": "always",
+      "polyak_rate": null
+    }
+  },
+  "protocol": {
+    "interaction_budget": 100000,
+    "temperature_per_second": 0.1,
+    "training_seeds": [
+      0,
+      1,
+      2
+    ],
+    "evaluation_reset_seeds": [
+      20000,
+      20001,
+      20002,
+      20003,
+      20004,
+      20005,
+      20006,
+      20007,
+      20008,
+      20009,
+      20010,
+      20011,
+      20012,
+      20013,
+      20014,
+      20015,
+      20016,
+      20017,
+      20018,
+      20019,
+      20020,
+      20021,
+      20022,
+      20023,
+      20024,
+      20025,
+      20026,
+      20027,
+      20028,
+      20029,
+      20030,
+      20031
+    ],
+    "evaluation_every_interactions": 2500,
+    "deterministic_evaluation": true,
+    "ablation_polyak_rate": 0.0125,
+    "baseline_expectation_samples": 1,
+    "checkpoint_replay": true,
+    "output_directory": "out/ph_sac/adaptation/acrobot_length_1.25_scratch"
+  }
+}

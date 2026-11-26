@@ -1,0 +1,166 @@
+{
+ "testbed": "lqr_6_2",
+ "testbed_settings": {
+  "failure_limits": {},
+  "reward_parameters": {
+   "control_cost": 0.1
+  },
+  "reset_parameters": {
+   "position_radius": 1.4142135623730951,
+   "velocity_noise": 0.0
+  },
+  "plant_parameters": {
+   "n_bodies": 6,
+   "n_actuated": 2,
+   "body_mass": 4.188790204786391,
+   "stiffness_low": 15.0,
+   "stiffness_high": 25.0,
+   "damping": 0.0,
+   "stiffness": "20.488135039273246,21.02763376071644,19.236547993389046,19.375872112626926,24.636627605010293,22.917250380826644"
+  },
+  "clock_kind": "two_tail_uniform",
+  "tail_probability": 0.99,
+  "tail_split": 0.9,
+  "torque_limit": 2.0,
+  "discount_rate": 0.6734235772506489
+ },
+ "model_step": 0.01,
+ "model_integrator": "rk4",
+ "network": {
+  "hidden_sizes": [
+   256,
+   256
+  ],
+  "plant_hidden_sizes": [
+   64,
+   64
+  ],
+  "activation": "tanh",
+  "mass_floor": 0.01,
+  "diffusion_floor": 0.001,
+  "damping_rank": 6,
+  "velocity_feature_scale": 6.283185307179586,
+  "diffusion": "none",
+  "actor_log_std_init": -3.0,
+  "input_matrix_start": "zero"
+ },
+ "training": {
+  "seed": 0,
+  "device": "cpu",
+  "replay_capacity": 300000,
+  "batch_size": 256,
+  "learning_rate": 0.00073,
+  "gradient_clip": 1E+30,
+  "warmup_episodes": 5,
+  "validation_fraction": 0.0,
+  "plant_step_dense_until": 100000,
+  "plant_step_every": 4,
+  "warmup_decisions": 10000
+ },
+ "temperature": {
+  "initial_alpha_c": 1.0,
+  "learn_temperature": true,
+  "target_entropy": -6.0
+ },
+ "explicit": {
+  "plant_source": "learned",
+  "continuation": "generator",
+  "polyak_rate": 0.02,
+  "rollout_paths": 1
+ },
+ "implicit": {
+  "plant_source": "learned",
+  "reward_source": "learned",
+  "reward_warm_steps": 2000,
+  "plant_warm_steps": 2000,
+  "plant_fit_covariance": "leading_order",
+  "temperature_every_rows": 1,
+  "solver": {
+   "resolvent_step": 1.0,
+   "policy_draws": 4,
+   "inner_steps": 400,
+   "residual_estimator": "all_pairs"
+  },
+  "rate": {
+   "replay_weight_max": 1.0,
+   "noise_variance_floor": 1.0,
+   "rollout_weight": 1.0,
+   "model_weight": 1.0,
+   "rollout_paths": 1,
+   "model_points": 256,
+   "rate_steps": 200,
+   "actor_steps": 400
+  },
+  "admission": {
+   "efolds": 3.0,
+   "margin_z": 1.645,
+   "initial_rows": 32,
+   "initial_paths": 4,
+   "pilot_batches": 2,
+   "real_row_budget": 512,
+   "simulated_path_budget": 65536,
+   "allocation": "pilot",
+   "inference": "empirical",
+   "plant_update": "always",
+   "polyak_rate": null
+  }
+ },
+ "protocol": {
+  "reward_observation": "end_state",
+  "interaction_budget": 500000,
+  "temperature_per_second": 1.0,
+  "training_seeds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "evaluation_reset_seeds": [
+   20000,
+   20001,
+   20002,
+   20003,
+   20004,
+   20005,
+   20006,
+   20007,
+   20008,
+   20009,
+   20010,
+   20011,
+   20012,
+   20013,
+   20014,
+   20015,
+   20016,
+   20017,
+   20018,
+   20019,
+   20020,
+   20021,
+   20022,
+   20023,
+   20024,
+   20025,
+   20026,
+   20027,
+   20028,
+   20029,
+   20030,
+   20031
+  ],
+  "evaluation_every_interactions": 20000,
+  "deterministic_evaluation": true,
+  "ablation_polyak_rate": 0.0125,
+  "baseline_expectation_samples": 1,
+  "checkpoint_replay": true,
+  "output_directory": "<RUN_ROOT>/ls6_match_2026-11-18/runs_unused/match_lqr_lqr_6_2",
+  "ct_sac_reward_units": "reference_period"
+ }
+}

@@ -1,0 +1,5 @@
+r20_acrobot_swingup
+r20_cartpole_balance_sparse
+r20_cartpole_two_poles
+r20_lqr_lqr_2_1
+a20t_lqr_lqr_2_1

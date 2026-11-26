@@ -1,0 +1,199 @@
+{
+  "_experiment_choices": {
+    "implicit.solver.policy_draws": "4; draws per state N >= 2, unspecified in the paper",
+    "implicit.solver.inner_steps": "400; K, the fixed value steps per inner solve, is unspecified in the paper (the paper's cost example uses K_k=200)",
+    "implicit.rate": "replay_weight_max 1, noise_variance_floor 1, rollout_weight 1, model_weight 1, model_points 256; rate_steps 200 and actor_steps 40 per outer iteration (4 times the earlier 50 and 10), as the Acrobot reference run's gate_e2e.py --rate-steps 200 --actor-steps 40; all unspecified in the paper",
+    "training.warmup_episodes": "5; unspecified in the paper",
+    "training.replay_capacity": "1000000; unspecified in the paper",
+    "training.validation_fraction": "0.05; f_val is unspecified in the paper. Under plant_update always these held-out rows are never read, as in the reference runs; the gated arms score them",
+    "training.device": "cpu; unspecified in the paper",
+    "network.hidden_sizes": "(256,256) for actor, value, rate and critics; the paper gives only the plant width",
+    "network.damping_rank": "velocity dimension; unspecified in the paper",
+    "network.velocity_feature_scale": "2*pi; from ../ct-rl-cpht-sac --velocity-scale, unspecified in the paper",
+    "temperature": "tuned from alpha_c=0.1 per second (the saved runs' 1e-3 per decision at a 10 ms mean), as every reference run; target entropy -3, -1 per decision dimension of the normalized [-1,1] box over which the actor's density is taken (common.ph_config.decision_box_entropy_target), as the saved runs' -3 in the [-1,1] box. The CT-SAC baseline keeps its own target in its action units",
+    "protocol.training_seeds": "0-9; the Acrobot reference runs used 0-11 (implicit) and 0-5 (explicit, CT-SAC); 10 seeds here as on the other tasks",
+    "protocol.evaluation_reset_seeds": "32 seeds from 20000; matches ../ct-rl-cpht-sac --eval-seed and --eval-episodes",
+    "protocol.evaluation_every_interactions": "20000; matches ../ct-rl-cpht-sac --eval-every-steps",
+    "protocol.baseline_expectation_samples": "1; the existing CT-SAC update supports only one",
+    "protocol.deterministic_evaluation": "true; the paper's evaluation holds the mean decision",
+    "testbed_settings.plant_parameters": "Xin-Kaneda Section 7 values; from ../ct-rl/environment/acrobot_xk.py",
+    "testbed_settings.failure_limits": "elbow_angle 4*pi, elbow_rate 4*pi, shoulder_rate 2*omega_s with omega_s=sqrt(2 E_s/M11(0)); from ../ct-rl/environment/acrobot_xk.py",
+    "testbed_settings.reward_parameters": "r1, the log-reciprocal Xin--Kaneda Lyapunov reward of the saved CPHT-SAC Acrobot runs and ../ct-rl/environment/acrobot_xk.py (reward_kind r1, reward_transform log_reciprocal): energy_scale=E_s=49 so V_down=E_s^2/2, upright_energy=24.5, lyapunov_k_p=61.2, reward_floor=1e-6; failure_rate -4.935 matches the saved runs. The paper says only that the rate is state-only",
+    "testbed_settings.reset_parameters": "release range (0.05, 0.5) rad; from ../ct-rl/environment/acrobot_xk.py",
+    "implicit.solver.resolvent_step": "1 s; the paper's table says to be set",
+    "explicit.polyak_rate": "0.0125; the paper's table for Acrobot-XK",
+    "protocol.ablation_polyak_rate": "0.0125; matches the explicit Polyak rate",
+    "implicit.reward_source": "learned: a reward-rate network fitted to observed rows, read through a copy frozen with each outer iteration's operator (the repository default). The Acrobot reference run read the task's reward function (r1) instead",
+    "implicit.reward_warm_steps": "2000 reward steps on replay batches once warm-up fills a batch, before the first value step; as learned_reward.py",
+    "implicit.plant_warm_steps": "2000 online-plant steps on replay batches once warm-up fills a batch, then admitted untested before the first value solve; the reference runs' gate_e2e.py --warm-fit 2000",
+    "implicit.plant_fit_covariance": "leading_order, as the reference runs' gate_e2e.py --cov leading_order; with network.diffusion none the covariance is zero either way",
+    "implicit.temperature_every_rows": "40: one tuning step of log alpha_c per 40 collected rows, taken in a burst at each outer iteration's end; the reference runs' gate_e2e.py --temperature-every 40. The explicit arms tune once per interaction",
+    "implicit.admission.plant_update": "always: the online plant is copied into the admitted plant untested at every cycle end, every M=ceil(3/log(1+lambda tau))=8 outer iterations; the transfer score J is recorded and decides nothing. The reference runs' gate_e2e.py --arm always. The staged-gate settings below apply only to the implicit_gated_admissions and implicit_fixed_gate_allocation arms",
+    "network.diffusion": "none: a drift-only plant with the drift loss 0.5*|e|^2/Delta, as the implicit Acrobot reference run (no_diffusion.py); shared by the explicit arms, whose reference run learned a diffusion above 0.001",
+    "reference_differences": "Against the reference runs of docs/implementation_report Appendix A (config acrobot_saved_reward): the implicit arm learns the reward rate where the reference read the task's r1 function; the explicit arms use the drift-only plant where their reference learned a diffusion, and their value head carries the boundary lift where the reference had none; 10 seeds instead of 12 and 6",
+    "model_integrator": "rk4, the repository default since 2026-11-09: every model integration of the plant (the plant fit's endpoint mean, the explicit rollout target, the rate head's rollouts, the gate paths) advances each substep of model_step by classical RK4 of the drift, the controller's feedback law evaluated at each of the four stages from that stage's state (testbed.controller.refresh_mode continuous). That is this testbed's simulator step (MuJoCo RK4 at the 1 ms physics step, the law evaluated at every stage by MuJoCo's control callback), so the true drift reproduces the simulator's endpoints and is the optimum of the plant fit. Runs before 2026-11-09 used semi_implicit, the velocity-first semi-implicit Euler step; the closed loop here is not stiff (h c_max / m_eff at most 0.12, against 2 on the reacher's wrist)",
+    "testbed.controller.refresh_mode": "continuous, the factory's (the table's task_refresh_mode): the impedance law turns the state into a torque at every RK4 stage, in the environment through MuJoCo's control callback and in the model's RK4 stages, as a continuous-time controller would, so a model_step above the 1 ms physics step integrates the same closed loop. Every run before 2026-11-09 held the torque through each 1 ms physics step and its stages; the top-level key refresh_mode held (or benchmarks/run_ph_sac.py --refresh-mode held) reproduces them bitwise"
+  },
+  "testbed": "acrobot_xk",
+  "testbed_settings": {
+    "failure_limits": {
+      "elbow_angle": 12.566370614359172,
+      "elbow_rate": 12.566370614359172,
+      "shoulder_rate": 9.168754108270097
+    },
+    "reward_parameters": {
+      "energy_scale": 49.0,
+      "upright_energy": 24.5,
+      "lyapunov_k_p": 61.2,
+      "reward_floor": 1e-06,
+      "failure_rate": -4.935138608376778
+    },
+    "reset_parameters": {
+      "release_angle_low": 0.05,
+      "release_angle_high": 0.5
+    },
+    "plant_parameters": {
+      "m1": 1.0,
+      "m2": 1.0,
+      "l1": 1.0,
+      "l2": 2.0,
+      "lc1": 0.5,
+      "lc2": 1.0,
+      "I1": 0.083,
+      "I2": 0.33,
+      "gravity": 9.8
+    }
+  },
+  "model_step": 0.001,
+  "model_integrator": "rk4",
+  "network": {
+    "hidden_sizes": [
+      256,
+      256
+    ],
+    "plant_hidden_sizes": [
+      64,
+      64
+    ],
+    "activation": "tanh",
+    "mass_floor": 0.01,
+    "diffusion_floor": 0.001,
+    "damping_rank": 2,
+    "velocity_feature_scale": 6.283185307179586,
+    "diffusion": "none"
+  },
+  "training": {
+    "seed": 0,
+    "device": "cpu",
+    "replay_capacity": 1000000,
+    "batch_size": 256,
+    "learning_rate": 0.0003,
+    "gradient_clip": 10.0,
+    "warmup_episodes": 5,
+    "validation_fraction": 0.05
+  },
+  "temperature": {
+    "initial_alpha_c": 0.1,
+    "learn_temperature": true,
+    "target_entropy": -3.0
+  },
+  "explicit": {
+    "plant_source": "learned",
+    "continuation": "generator",
+    "polyak_rate": 0.0125,
+    "rollout_paths": 4
+  },
+  "implicit": {
+    "plant_source": "learned",
+    "reward_source": "learned",
+    "reward_warm_steps": 2000,
+    "plant_warm_steps": 2000,
+    "plant_fit_covariance": "leading_order",
+    "temperature_every_rows": 40,
+    "solver": {
+      "resolvent_step": 1.0,
+      "policy_draws": 4,
+      "inner_steps": 400,
+      "residual_estimator": "all_pairs"
+    },
+    "rate": {
+      "replay_weight_max": 1.0,
+      "noise_variance_floor": 1.0,
+      "rollout_weight": 1.0,
+      "model_weight": 1.0,
+      "rollout_paths": 4,
+      "model_points": 256,
+      "rate_steps": 200,
+      "actor_steps": 40
+    },
+    "admission": {
+      "efolds": 3.0,
+      "margin_z": 1.645,
+      "initial_rows": 32,
+      "initial_paths": 4,
+      "pilot_batches": 2,
+      "real_row_budget": 512,
+      "simulated_path_budget": 65536,
+      "allocation": "pilot",
+      "inference": "empirical",
+      "plant_update": "always",
+      "polyak_rate": null
+    }
+  },
+  "protocol": {
+    "interaction_budget": 800000,
+    "temperature_per_second": 0.1,
+    "training_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "evaluation_reset_seeds": [
+      20000,
+      20001,
+      20002,
+      20003,
+      20004,
+      20005,
+      20006,
+      20007,
+      20008,
+      20009,
+      20010,
+      20011,
+      20012,
+      20013,
+      20014,
+      20015,
+      20016,
+      20017,
+      20018,
+      20019,
+      20020,
+      20021,
+      20022,
+      20023,
+      20024,
+      20025,
+      20026,
+      20027,
+      20028,
+      20029,
+      20030,
+      20031
+    ],
+    "evaluation_every_interactions": 20000,
+    "deterministic_evaluation": true,
+    "ablation_polyak_rate": 0.0125,
+    "baseline_expectation_samples": 1,
+    "checkpoint_replay": true,
+    "output_directory": "out/ph_sac/acrobot"
+  }
+}

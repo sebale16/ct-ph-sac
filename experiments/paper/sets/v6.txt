@@ -1,0 +1,6 @@
+r20_cartpole_balance
+r20_cartpole_swingup
+r20_cartpole_three_poles
+r20_point_mass_easy
+r20_lqr_lqr_6_2
+a20t_lqr_lqr_6_2

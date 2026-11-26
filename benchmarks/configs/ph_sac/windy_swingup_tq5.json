@@ -1,0 +1,188 @@
+{
+  "_experiment_choices": {
+    "implicit.solver.policy_draws": "4; draws per state N >= 2, unspecified in the paper",
+    "implicit.solver.inner_steps": "400; K, the fixed value steps per inner solve, is unspecified in the paper (the paper's cost example uses K_k=200)",
+    "implicit.rate": "replay_weight_max 1, noise_variance_floor 1, rollout_weight 1, model_weight 1, model_points 256, rate_steps 50, actor_steps 10, as the windy reference runs; all unspecified in the paper",
+    "training.warmup_episodes": "5; unspecified in the paper",
+    "training.replay_capacity": "1000000; unspecified in the paper",
+    "training.validation_fraction": "0.05; f_val is unspecified in the paper. Under plant_update always these held-out rows are never read, as in the reference runs; the gated arms score them",
+    "training.device": "cpu; unspecified in the paper",
+    "network.hidden_sizes": "(256,256) for actor, value, rate and critics; the paper gives only the plant width",
+    "network.damping_rank": "velocity dimension; unspecified in the paper",
+    "network.velocity_feature_scale": "2*pi; from ../ct-rl-cpht-sac --velocity-scale, unspecified in the paper",
+    "temperature": "tuned from alpha_c=0.1 per second (the saved runs' 1e-3 per decision at a 10 ms mean), as every reference run; target entropy -3, -1 per decision dimension of the normalized [-1,1] box over which the actor's density is taken (common.ph_config.decision_box_entropy_target), as the saved runs' -3 in the [-1,1] box. The CT-SAC baseline keeps its own target in its action units",
+    "protocol.training_seeds": "0-9, as the windy reference runs; unspecified in the paper",
+    "protocol.evaluation_reset_seeds": "32 seeds from 20000; matches ../ct-rl-cpht-sac --eval-seed and --eval-episodes",
+    "protocol.evaluation_every_interactions": "20000; matches ../ct-rl-cpht-sac --eval-every-steps",
+    "protocol.baseline_expectation_samples": "1; the existing CT-SAC update supports only one",
+    "protocol.deterministic_evaluation": "true; the paper's evaluation holds the mean decision",
+    "testbed_settings.clock": "two_tail_uniform with tail_probability 0.8 and tail_split 0.5; the paper says two-tailed on [2,18] ms with mean T, values from ../ct-rl-cpht-sac",
+    "testbed_settings.reward_parameters": "angle_weight 10, velocity_weight 1, velocity_scale 2*pi, effort_weight 0.01; from ../ct-rl-cpht-sac",
+    "testbed_settings.reset_parameters": "angle_radius 0.3, velocity_radius 0.5 about start_angle pi; from ../ct-rl-cpht-sac",
+    "explicit.polyak_rate": "0.005; the paper's table for the windy pendulum",
+    "protocol.ablation_polyak_rate": "0.005; matches the explicit Polyak rate",
+    "implicit.reward_source": "learned: a reward-rate network fitted to observed rows, read through a copy frozen with each outer iteration's operator (the repository default). The windy swing-up reference runs read the task's reward function instead",
+    "implicit.reward_warm_steps": "2000 reward steps on replay batches once warm-up fills a batch, before the first value step; as learned_reward.py",
+    "implicit.plant_warm_steps": "2000 online-plant steps on replay batches once warm-up fills a batch, then admitted untested before the first value solve; the reference runs' gate_e2e.py --warm-fit 2000",
+    "implicit.plant_fit_covariance": "leading_order: Delta*A(s), as the reference runs' gate_e2e.py --cov leading_order",
+    "implicit.temperature_every_rows": "40: one tuning step of log alpha_c per 40 collected rows, taken in a burst at each outer iteration's end; the reference runs' gate_e2e.py --temperature-every 40. The explicit arms tune once per interaction",
+    "implicit.admission.plant_update": "always: the online plant is copied into the admitted plant untested at every cycle end, every M=ceil(3/log(1+lambda tau))=32 outer iterations; the transfer score J is recorded and decides nothing. The reference runs' gate_e2e.py --arm always. The staged-gate settings below apply only to the implicit_gated_admissions and implicit_fixed_gate_allocation arms",
+    "network.diffusion": "learned, above diffusion_floor 0.001 and started at the true wind scale, as the windy reference runs",
+    "reference_differences": "Against the reference runs of docs/implementation_report Appendix A (config windy_swingup_tq5): the implicit arms learn the reward rate where the reference read the task's function, and the explicit arms' value head carries the boundary lift where the reference had none. The tq12 reference config's tolerance-stopping solver keys and ablation_inner_iterations are gone from the code; both swing-up configs use 400 fixed inner steps",
+    "testbed_settings.task": "swingup from ../ct-rl-cpht-sac/docs/windy_pendulum_swingup.md at 5 N m (testbed_settings.torque_limit): start pi +- 0.3 (reset_parameters.start_angle pi), sigma_w 1, setpoint within +-pi, no angle failure, the 4*pi speed limit kept, 200k decisions. Formerly installed by windy_swingup.py; now common.ph_config.windy_pendulum_config(task='swingup')",
+    "model_integrator": "semi_implicit: the velocity-first semi-implicit Euler-Maruyama substep, the velocity kick carried into the angle through h, which is this testbed's simulator step (MuJoCo Euler at the 1 ms physics step with damping 0, the gust a force held through each physics step), so the model integrator matches the simulator as rk4 does on the RK4 testbeds; also the map of every run before 2026-11-09. The repository default rk4 would integrate this Euler-simulated task by RK4",
+    "testbed.controller.refresh_mode": "continuous, the factory's (the table's task_refresh_mode): the impedance law is evaluated from the current state at every integrator stage. Under this testbed's 1 ms Euler physics a step has one stage, at its start, so this is bitwise the held torque of every run before 2026-11-09 (refresh_mode held), in the environment and in the semi-implicit model step"
+  },
+  "testbed": "windy_pendulum",
+  "testbed_settings": {
+    "task": "swingup",
+    "reward_parameters": {
+      "angle_weight": 10.0,
+      "velocity_weight": 1.0,
+      "velocity_scale": 6.283185307179586,
+      "effort_weight": 0.01
+    },
+    "reset_parameters": {
+      "angle_radius": 0.3,
+      "velocity_radius": 0.5,
+      "start_angle": 3.141592653589793
+    },
+    "tail_probability": 0.8,
+    "tail_split": 0.5,
+    "clock_kind": "two_tail_uniform",
+    "beta_shape": null,
+    "torque_limit": 5.0
+  },
+  "model_step": 0.001,
+  "model_integrator": "semi_implicit",
+  "network": {
+    "hidden_sizes": [
+      256,
+      256
+    ],
+    "plant_hidden_sizes": [
+      64,
+      64
+    ],
+    "activation": "tanh",
+    "mass_floor": 0.01,
+    "diffusion_floor": 0.001,
+    "damping_rank": 1,
+    "velocity_feature_scale": 6.283185307179586,
+    "diffusion": "learned"
+  },
+  "training": {
+    "seed": 0,
+    "device": "cpu",
+    "replay_capacity": 1000000,
+    "batch_size": 256,
+    "learning_rate": 0.0003,
+    "gradient_clip": 10.0,
+    "warmup_episodes": 5,
+    "validation_fraction": 0.05
+  },
+  "temperature": {
+    "initial_alpha_c": 0.1,
+    "learn_temperature": true,
+    "target_entropy": -3.0
+  },
+  "explicit": {
+    "plant_source": "learned",
+    "continuation": "generator",
+    "polyak_rate": 0.005,
+    "rollout_paths": 4
+  },
+  "implicit": {
+    "plant_source": "learned",
+    "reward_source": "learned",
+    "reward_warm_steps": 2000,
+    "plant_warm_steps": 2000,
+    "plant_fit_covariance": "leading_order",
+    "temperature_every_rows": 40,
+    "solver": {
+      "resolvent_step": 1.0,
+      "policy_draws": 4,
+      "inner_steps": 400,
+      "residual_estimator": "all_pairs"
+    },
+    "rate": {
+      "replay_weight_max": 1.0,
+      "noise_variance_floor": 1.0,
+      "rollout_weight": 1.0,
+      "model_weight": 1.0,
+      "rollout_paths": 4,
+      "model_points": 256,
+      "rate_steps": 50,
+      "actor_steps": 10
+    },
+    "admission": {
+      "efolds": 3.0,
+      "margin_z": 1.645,
+      "initial_rows": 32,
+      "initial_paths": 4,
+      "pilot_batches": 2,
+      "real_row_budget": 512,
+      "simulated_path_budget": 65536,
+      "allocation": "pilot",
+      "inference": "empirical",
+      "plant_update": "always",
+      "polyak_rate": null
+    }
+  },
+  "protocol": {
+    "interaction_budget": 200000,
+    "temperature_per_second": 0.1,
+    "training_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "evaluation_reset_seeds": [
+      20000,
+      20001,
+      20002,
+      20003,
+      20004,
+      20005,
+      20006,
+      20007,
+      20008,
+      20009,
+      20010,
+      20011,
+      20012,
+      20013,
+      20014,
+      20015,
+      20016,
+      20017,
+      20018,
+      20019,
+      20020,
+      20021,
+      20022,
+      20023,
+      20024,
+      20025,
+      20026,
+      20027,
+      20028,
+      20029,
+      20030,
+      20031
+    ],
+    "evaluation_every_interactions": 20000,
+    "deterministic_evaluation": true,
+    "ablation_polyak_rate": 0.005,
+    "baseline_expectation_samples": 1,
+    "checkpoint_replay": true,
+    "output_directory": "out/ph_sac/windy_swingup_tq5"
+  }
+}

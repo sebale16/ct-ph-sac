@@ -1,0 +1,11 @@
+# r20_point_mass_easy: arm explicit_rollout_torque, config r20_point_mass_easy.json, seeds 0-9. One run per line: name|threads|arguments of benchmarks/run_ph_sac.py
+rollout_torque_s0|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20_point_mass_easy.json --arms explicit_rollout_torque --seeds 0
+rollout_torque_s1|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20_point_mass_easy.json --arms explicit_rollout_torque --seeds 1
+rollout_torque_s2|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20_point_mass_easy.json --arms explicit_rollout_torque --seeds 2
+rollout_torque_s3|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20_point_mass_easy.json --arms explicit_rollout_torque --seeds 3
+rollout_torque_s4|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20_point_mass_easy.json --arms explicit_rollout_torque --seeds 4
+rollout_torque_s5|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20_point_mass_easy.json --arms explicit_rollout_torque --seeds 5
+rollout_torque_s6|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20_point_mass_easy.json --arms explicit_rollout_torque --seeds 6
+rollout_torque_s7|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20_point_mass_easy.json --arms explicit_rollout_torque --seeds 7
+rollout_torque_s8|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20_point_mass_easy.json --arms explicit_rollout_torque --seeds 8
+rollout_torque_s9|2|--config <RUN_ROOT>/final/2026-11-23_r20/configs/r20_point_mass_easy.json --arms explicit_rollout_torque --seeds 9

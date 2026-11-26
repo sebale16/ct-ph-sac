@@ -218,3 +218,6 @@ benchmarks/*
 !benchmarks/*.sh
 !benchmarks/hyperparams/
 !benchmarks/hyperparams/*
+!benchmarks/configs/
+!benchmarks/configs/ph_sac/
+!benchmarks/configs/ph_sac/*.json
